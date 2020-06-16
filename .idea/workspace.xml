@@ -2,11 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8b404750-f885-4452-976d-be13c61ee749" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/app/Helpers/JwtAuth.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/RegisterController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/RegisterController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/app.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/app.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -174,7 +172,7 @@
       <option name="presentableId" value="Default" />
       <updated>1592156941784</updated>
       <workItem from="1592156943048" duration="2728000" />
-      <workItem from="1592159843014" duration="15520000" />
+      <workItem from="1592159843014" duration="18333000" />
     </task>
     <servers />
   </component>
