@@ -4,40 +4,34 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
 {
-    function register(Request $request)
+    function signup(Request $request)
     {
-        //Recoger Post
-        $json = $request->input('json', null);
-        if (is_null($json)) {
-            return $this->error('Los datos no se han recibido');
-        }
-        $param = json_decode($json);
-
         //Verificar Datos
-        if (!$this->verityData($param)) {
-            return $this->error('Los datos introducidos no son correctos');
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'required',
+
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->errors()], 401);
         }
+//        if (!$this->verityData($param)) {
+//            return $this->error('Los datos introducidos no son correctos');
+//        }
 
         //Crear usuario
         $user = new User();
-        $user->name = $param->name;
-        $user->email = $param->email;
-        $user->password = hash('sha256', $param->password);
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = hash('sha256', $request->password);
+        $user->save();
 
-        //Verificar que el usuario no existe
-        $issetUser = User::query()->where('email', '=', $user->email)->first();
-
-        if (is_null($issetUser)) {
-            $user->save();
-            $data = $this->ok('Usuario registrado correctamente');
-        } else {
-            $data = $this->error('Usuario duplicado');
-        }
-
-        return json_encode($data);
+        return json_encode($this->ok('Usuario registrado'));
     }
 
 
