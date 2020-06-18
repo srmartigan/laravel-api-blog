@@ -20,9 +20,6 @@ class RegisterController extends Controller
         if ($validator->fails()) {
             return response()->json(['error'=>$validator->errors()], 401);
         }
-//        if (!$this->verityData($param)) {
-//            return $this->error('Los datos introducidos no son correctos');
-//        }
 
         //Crear usuario
         $user = new User();
@@ -34,16 +31,6 @@ class RegisterController extends Controller
         return json_encode($this->ok('Usuario registrado'));
     }
 
-
-    function error(string $message = 'error'): array
-    {
-        return [
-            'status' => 'error',
-            'code' => 400,
-            'message' => $message
-        ];
-    }
-
     function ok(string $message = 'ok'): array
     {
         return [
@@ -53,24 +40,4 @@ class RegisterController extends Controller
         ];
     }
 
-    /**
-     * @param $param
-     * @return bool
-     */
-    public function verityData($param): bool
-    {
-        $verify = true;
-        //Verificamos que los atributos existen
-        isset($param->name) ?: $verify = false;
-        isset($param->email)?: $verify = false;
-        isset($param->password) ?: $verify = false;
-
-        if ($verify == false) return false;
-        //Verificamos que no hay cadenas vacias
-        empty($param->name)?$verify = false : null;
-        empty($param->email)?$verify = false : null;
-        empty($param->password)?$verify = false : null;
-
-        return $verify ;
-    }
 }

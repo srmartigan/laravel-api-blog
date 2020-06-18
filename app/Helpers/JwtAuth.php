@@ -12,7 +12,7 @@ class JwtAuth
 
     public function __construct()
     {
-        $this->key =  'esta es la clave secreta que vamos a utilizar -*4982709847298742934-434*';
+        $this->key = '*;Jz^`6tx]g!mwxsMfsbw|zI$jdDp%02]-<u%(#ogDt`-P@o66/&YBm?!)^"H`0';
     }
 
     public function signup($email, $password, $getToken = null)
@@ -31,42 +31,56 @@ class JwtAuth
                 'exp' => time() + (7 * 24 * 60 * 60)
             ];
 
-            $jwt = JWT::encode($token,$this->key,'HS256');
-            $decoded = JWT::decode($jwt,$this->key,['HS256']);
+            $jwt = JWT::encode($token, $this->key, 'HS256');
+            $decoded = JWT::decode($jwt, $this->key, ['HS256']);
 
-            if(!is_null($getToken)){
+            if (is_null($getToken)) {
                 return $jwt;
-            }else{
+            } else {
                 return $decoded;
             }
 
-        }else{
+        } else {
             // Devolver error
             return ['status' => 'error', 'message' => 'Login ha fallado !!'];
         }
 
     }
 
-    public function checkToken($jwt, $getIdentity = false){
+    public function checkToken($jwt, $getIdentity = false)
+    {
         $auth = false;
-            try{
-                $decoded = JWT::decode($jwt, $this->key, ['HS256']);
-            }catch(\UnexpectedValueException $e){
-                $auth = false;
-            }catch(\DomainException $e){
-                $auth = false;
-            }
+        $decoded = null;
+        $user = null;
 
+        //Descodificamos JWT
+        try {
+            $decoded = JWT::decode($jwt, $this->key, ['HS256']);
+        } catch (\UnexpectedValueException $e) {
+            $auth = false;
+        } catch (\DomainException $e) {
+            $auth = false;
+        }
 
-        if (is_object($decoded) && isset($decoded->sub)){
-                $auth = true;
-            }else{
-                $auth = false;
-            }
+        //Validamos
+        if (is_object($decoded)) {
+            $user = User::query()->where([
+                'email' => $decoded->email,
+                'id' => $decoded->sub
+            ])->first();
+        }else{
+            $auth = false;
+        }
 
-            if($getIdentity){
-                return $decoded;
-            }
+        if (is_object($user)) {
+            $auth = true;
+        } else {
+            $auth = false;
+        }
+
+        if ($getIdentity) {
+            return $decoded;
+        }
 
         return $auth;
     }

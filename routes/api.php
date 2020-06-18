@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUndefinedClassInspection */
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -18,4 +18,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/signup', 'RegisterController@signup');
+Route::post('/register', 'RegisterController@signup')->name('register');
+Route::post('/login' , 'LoginController@login')->name('login');
+
+//Route::apiResource('car','CarController');
+
+Route::get('/car','CarController@index');
+Route::post('/car','CarController@store');
+Route::get('/car/{car}','CarController@show');
+Route::put('/car/{car}','CarController@edit');
+Route::delete('/car/{car}','CarController@destroy');
