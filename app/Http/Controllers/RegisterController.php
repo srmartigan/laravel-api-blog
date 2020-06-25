@@ -3,41 +3,27 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\User;
-use Illuminate\Support\Facades\Validator;
+use App\Http\UseCase\User\CreateUserUseCase;
 
 class RegisterController extends Controller
 {
     function signup(Request $request)
     {
-        //Verificar Datos
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required',
+        $json = $request->input('json');
+        $datosUser = json_decode($json);
 
-        ]);
-        if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors()], 401);
+        try {
+            $createUser = new CreateUserUseCase($datosUser);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'error' => $e->getMessage()], 401);
         }
 
-        //Crear usuario
-        $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = hash('sha256', $request->password);
-        $user->save();
-
-        return json_encode($this->ok('Usuario registrado'));
-    }
-
-    function ok(string $message = 'ok'): array
-    {
-        return [
-            'status' => 'ok',
+        return response()->json([
+            'ok' => 'true',
+            'status' => 'success',
             'code' => 200,
-            'message' => $message
-        ];
+            'message' => 'Usuario registrado!!'
+        ], 200);
     }
 
 }

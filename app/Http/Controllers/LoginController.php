@@ -12,19 +12,31 @@ class LoginController extends Controller
     function login(Request $request)
     {
         $jwtAuth = new JwtAuth();
+        $getToken = null;
 
-        //Verificar Datos
-        $validator = Validator::make($request->all(), [
+        //Validar datos
+        $json = $request->input('json');
+        $arrayJson = json_decode($json, true);
+
+        if(isset($arrayJson['gettoken']) && $arrayJson['gettoken'] == true)
+        {
+            $getToken = true;
+        }
+
+        $validator = Validator::make($arrayJson, [
             'email' => 'required|email',
             'password' => 'required',
-
         ]);
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 401);
+            return response()->json([
+                'status' => 'error',
+                'error' => $validator->errors()->messages()
+            ], 401);
         }
-        $password = hash('sha256', $request->password);
 
-        $signup = $jwtAuth->signup($request->email, $password);
+        $password = hash('sha256', $arrayJson['password']);
+
+        $signup = $jwtAuth->signup($arrayJson['email'], $password,$getToken);
 
         return response()->json($signup, 200);
     }
